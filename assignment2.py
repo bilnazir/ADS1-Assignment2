@@ -6,6 +6,7 @@ Created on Fri Dec  9 14:11:48 2022
 @author: bilalnazir
 """
 
+import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
@@ -60,9 +61,52 @@ def get_data_frames(filename,countries,indicator):
     return df_countries, df_years
 
 # List of countries 
-countries = ['Germany','Qatar','United States','China','United Kingdom']
+countries = ['Germany','Australia','United States','China','United Kingdom']
 # calling functions to get dataframes and use for plotting graphs.
-df, df2 = get_data_frames('API_19_DS2_en_csv_v2_4700503.csv',countries,'SP.POP.TOTL')
+df_c, df_y = get_data_frames('API_19_DS2_en_csv_v2_4700503.csv',countries,'AG.LND.FRST.ZS')
+
+
+
+# Bar Chart for Forest area (% of land area)
+num= np.arange(5)
+width= 0.2
+# Select specific years data 
+df_y = df_y.loc[df_y['Years'].isin(['2000','2001','2002','2003','2004'])]
+years = df_y['Years'].tolist() 
+
+# Plotting data on bar chart
+plt.figure(dpi=144)
+plt.title('Forest area (% of land area)')
+plt.bar(num,df_y['Germany'], width, label='Germany')
+plt.bar(num+0.2, df_y['Australia'], width, label='Australia')
+plt.bar(num-0.2, df_y['United States'], width, label='United States')
+plt.bar(num-0.4, df_y['China'], width, label='China')
+plt.xticks(num, years)
+plt.xlabel('Years')
+plt.ylabel('% of land area')
+plt.legend(loc='center left', bbox_to_anchor=(1, 0.5))
+plt.show()
+
+# Bar Chart for Agricultural land (% of land area)
+df_c, df_y = get_data_frames('API_19_DS2_en_csv_v2_4700503.csv',countries,'AG.LND.AGRI.ZS')
+num= np.arange(5)
+width= 0.2
+# Select specific years data 
+df_y = df_y.loc[df_y['Years'].isin(['2000','2001','2002','2003','2004'])]
+years = df_y['Years'].tolist() 
+
+#Ploting data on bar chart  
+plt.figure(dpi=144)
+plt.title('Agricultural land (% of land area)')
+plt.bar(num,df_y['Germany'], width, label='Germany')
+plt.bar(num+0.2, df_y['Australia'], width, label='Australia')
+plt.bar(num-0.2, df_y['United States'], width, label='United States')
+plt.bar(num-0.4, df_y['China'], width, label='China')
+plt.xticks(num, years)
+plt.xlabel('Years')
+plt.ylabel('% of land area')
+plt.legend(loc='center left', bbox_to_anchor=(1, 0.5))
+plt.show()
 
 
 
