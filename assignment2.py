@@ -63,6 +63,7 @@ def get_data_frames(filename,countries,indicator):
     
     return df_countries, df_years
 
+
 # List of countries 
 countries = ['Germany','Australia','United States','China','United Kingdom']
 # calling functions to get dataframes and use for plotting graphs.
@@ -173,7 +174,48 @@ plt.title("CO2 emissions (metric tons per capita)")
 plt.show()
 
 #==============================================================================
+# Line plot for CO2 emissions (metric tons per capita)
+#==============================================================================
+df_c, df_y = get_data_frames('API_19_DS2_en_csv_v2_4700503.csv',countries,'EN.ATM.CO2E.PC')  
 
+# Plotting Line Plot
+plt.figure(figsize=(6,3))
+# Filter specific years data
+df_y = df_y[(df_y['Years']>="1990") & (df_y['Years']<="2020")]
+# Converting years as numeric to apply xlim.
+df_y['Years'] = pd.to_numeric(df_y['Years'])
+# Plotting data on chart
+df_y.plot("Years", countries, title='CO2 emissions (metric tons per capita)',
+          legend='leftbottom', linestyle="dashed")
+# Removing space in graphs using xlim
+plt.xlim(1990,2019)
+plt.ylabel('metric tons per capita')
+# Putting legends outside the box to make chart lines visible to analyse
+plt.legend(loc='center left', bbox_to_anchor=(1, 0.5))
+plt.show()
+
+
+#==============================================================================
+# Line plot for GDP per capita growth (annual %)
+#==============================================================================
+# Reading another file to get data for GDP. 
+df_c, df_y = get_data_frames('API_NY.GDP.PCAP.KD.ZG_DS2_en_csv_v2_4748430.csv',countries,'NY.GDP.PCAP.KD.ZG')  
+
+# Plotting Line Plot
+plt.figure(figsize=(6,3))
+# Filter specific years data
+df_y = df_y[(df_y['Years']>="1990") & (df_y['Years']<="2020")]
+# Converting years as numeric to apply xlim.
+df_y['Years'] = pd.to_numeric(df_y['Years'])
+# Plotting data on chart
+df_y.plot("Years", countries, title='GDP per capita growth (annual %)',
+          legend='leftbottom', linestyle="dotted")
+# Removing space in graphs using xlim
+plt.xlim(1990,2019)
+plt.ylabel('metric tons per capita')
+# Putting legends outside the box to make chart lines visible to analyse
+plt.legend(loc='center left', bbox_to_anchor=(1, 0.5))
+plt.show()
 
 
 
