@@ -9,6 +9,7 @@ Created on Fri Dec  9 14:11:48 2022
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+import scipy.stats as stats
 
 def get_data_frames(filename,countries,indicator):
     '''
@@ -146,9 +147,9 @@ plt.title("Population growth (annual %)")
 plt.show()
 
 #==============================================================================
-# Pie chart for CO2 emissions (metric tons per capita)
+# Pie chart for Mortality rate, under-5 (per 1,000 live births)
 #==============================================================================
-df_c, df_y = get_data_frames('API_19_DS2_en_csv_v2_4700503.csv',countries,'EN.ATM.CO2E.PC')
+df_c, df_y = get_data_frames('API_19_DS2_en_csv_v2_4700503.csv',countries,'SH.DYN.MORT')
 
 # calculating data for pie chart
 aus1 = np.sum(df_y['Australia'])
@@ -165,12 +166,12 @@ china1 = chi1 / total1*100
 united_kingdom1 = uk1 / total1*100
 germany1 = ger1 / total1*100
 poverty_list = np.array([germany1,australia1,united_states1,china1,united_kingdom1])
-explode=(0.0,0.0,0.2,0.1,0.0) 
+explode=(0.0,0.0,0.0,0.1,0.0) 
 
 # Plotting pie charts
 plt.figure(dpi=144)
 plt.pie(poverty_list,labels=countries,explode=explode,autopct=('%1.1f%%'))
-plt.title("CO2 emissions (metric tons per capita)")
+plt.title("Mortality rate, under-5 (per 1,000 live births)")
 plt.show()
 
 #==============================================================================
@@ -199,7 +200,7 @@ plt.show()
 # Line plot for GDP per capita growth (annual %)
 #==============================================================================
 # Reading another file to get data for GDP. 
-df_c, df_y = get_data_frames('API_NY.GDP.PCAP.KD.ZG_DS2_en_csv_v2_4748430.csv',countries,'NY.GDP.PCAP.KD.ZG')  
+df_c, df_y = get_data_frames('API_NY.GDP.PCAP.KD.ZG_DS2_en_csv_v2_4748430.csv',countries,'NY.GDP.PCAP.KD.ZG')
 
 # Plotting Line Plot
 plt.figure(figsize=(6,3))
@@ -217,6 +218,30 @@ plt.ylabel('metric tons per capita')
 plt.legend(loc='center left', bbox_to_anchor=(1, 0.5))
 plt.show()
 
+
+#==============================================================================
+# Statistical Analysis of GDP per capita growth (annual %)
+#==============================================================================
+df_c, df_y = get_data_frames('API_NY.GDP.PCAP.KD.ZG_DS2_en_csv_v2_4748430.csv',countries,'NY.GDP.PCAP.KD.ZG')
+# Filter data by years
+df_y = df_y[(df_y['Years']>="1990") & (df_y['Years']<="2020")]
+# Cleaning data by droping nan values
+df_y.dropna()
+
+countries_mean = np.mean(df_y[countries])
+countries_std = np.std(df_y[countries])
+countries_skew = stats.skew(df_y[countries])
+countries_kurtosis = stats.kurtosis(df_y[countries])
+
+print("countries_mean: ",countries_mean)
+print("countries_std: ",countries_std)
+print("countries_skew: ",countries_skew)
+print("countries_kurtosis: ",countries_kurtosis)
+
+countries_mean.to_csv("countries_mean.csv")
+countries_std.to_csv("countries_std.csv")
+countries_skew.to_csv("countries_skew.csv")
+countries_kurtosis.to_csv("countries_kurtosis.csv")
 
 
 
